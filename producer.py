@@ -1,7 +1,9 @@
-from kafka import KafkaProducer
 import multiprocessing
-import click
 import time
+
+import click
+
+from kafka import KafkaProducer
 
 
 def send_to_kafka(line):
