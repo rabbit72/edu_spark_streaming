@@ -7,6 +7,7 @@ from kafka import KafkaProducer
 
 
 def send_to_kafka(line):
+    # sleep before sending for delay
     time.sleep(KAFKA_DELAY)
     producer = KafkaProducer(bootstrap_servers=KAFKA_ADDRESS)
     producer.send(KAFKA_TOPIC, line.rstrip().encode("utf8"))
@@ -29,6 +30,7 @@ def send_to_kafka(line):
 )
 def main(csv_file, topic, process_quantity, host, port, header_pass, delay):
 
+    # global variables for send_to_kafka function in other processes
     global KAFKA_TOPIC, KAFKA_ADDRESS, KAFKA_DELAY
     KAFKA_TOPIC = topic
     KAFKA_ADDRESS = f"{host}:{port}"
@@ -36,6 +38,8 @@ def main(csv_file, topic, process_quantity, host, port, header_pass, delay):
 
     if header_pass:
         next(csv_file)  # skip header
+
+    # pool processes for parallel sending
     with multiprocessing.Pool(process_quantity) as p:
         p.map(send_to_kafka, csv_file)
 
