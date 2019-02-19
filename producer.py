@@ -9,12 +9,12 @@ from kafka import KafkaProducer
 def send_to_kafka(line):
     time.sleep(KAFKA_DELAY)
     producer = KafkaProducer(bootstrap_servers=KAFKA_ADDRESS)
-    producer.send(KAFKA_TOPIC, line)
+    producer.send(KAFKA_TOPIC, line.rstrip().encode("utf8"))
     producer.flush()
 
 
 @click.command()
-@click.argument("csv_file", type=click.File("rb"))
+@click.argument("csv_file", type=click.File("r"))
 @click.option("--topic", "-t", default="test")
 @click.option("--process_quantity", type=int, default=multiprocessing.cpu_count())
 @click.option("--host", "-h", type=str, default="172.18.0.2")
