@@ -14,24 +14,24 @@ def send_to_kafka(line):
 
 
 @click.command()
-@click.argument('csv_file', type=click.File('rb'))
-@click.option('--topic', '-t', default='test')
-@click.option('--process_quantity', type=int, default=multiprocessing.cpu_count())
-@click.option('--host', '-h', type=str, default='172.18.0.2')
-@click.option('--port', '-p', type=int, default=6667)
-@click.option('--header-pass', '-head', type=bool, default=True)
+@click.argument("csv_file", type=click.File("rb"))
+@click.option("--topic", "-t", default="test")
+@click.option("--process_quantity", type=int, default=multiprocessing.cpu_count())
+@click.option("--host", "-h", type=str, default="172.18.0.2")
+@click.option("--port", "-p", type=int, default=6667)
+@click.option("--header-pass", "-head", type=bool, default=True)
 @click.option(
-    '--delay',
-    '-d',
+    "--delay",
+    "-d",
     type=float,
     default=0,
-    help='Seconds for delay before sending message'
+    help="Seconds for delay before sending message",
 )
 def main(csv_file, topic, process_quantity, host, port, header_pass, delay):
 
     global KAFKA_TOPIC, KAFKA_ADDRESS, KAFKA_DELAY
     KAFKA_TOPIC = topic
-    KAFKA_ADDRESS = f'{host}:{port}'
+    KAFKA_ADDRESS = f"{host}:{port}"
     KAFKA_DELAY = delay
 
     if header_pass:
@@ -40,5 +40,5 @@ def main(csv_file, topic, process_quantity, host, port, header_pass, delay):
         p.map(send_to_kafka, csv_file)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
