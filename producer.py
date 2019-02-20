@@ -27,6 +27,10 @@ def batch_generator(iterable: iter, batchsize: int) -> list:
     :return: batch with batchsize-elements from iter
     :rtype list
     """
+    if not isinstance(batchsize, int) or batchsize <= 0:
+        raise ValueError(
+            f"Batchsize must be integer above zero. Current value: {batchsize}"
+        )
     while True:
         batch: list = []
         for _ in range(batchsize):
