@@ -2,7 +2,7 @@ import pytest
 from producer import batch_generator
 
 
-@pytest.mark.parametrize("chunksize, input, expected_output", [
+@pytest.mark.parametrize("chunksize, input_data, expected_output", [
     (2, [1, 2, 3, 4, 5], [[1, 2], [3, 4], [5]]),
     (2, [1, 2, 3, 4], [[1, 2], [3, 4]]),
     (4, [1, 2, 3, 4], [[1, 2, 3, 4]]),
@@ -10,8 +10,8 @@ from producer import batch_generator
     (1, [], []),
 
 ])
-def test_batch_generator(chunksize, input, expected_output):
-    iterable: iter = iter(input)
+def test_batch_generator(chunksize, input_data, expected_output):
+    iterable: iter = iter(input_data)
     assert list(batch_generator(iterable, chunksize)) == expected_output
 
 
