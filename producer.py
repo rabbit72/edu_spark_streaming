@@ -6,7 +6,12 @@ import click
 from kafka import KafkaProducer
 
 
-def send_to_kafka(line):
+def send_to_kafka(line: str) -> None:
+    """
+    Function for sending message to kafka topic
+    :param str line: message for kafka topic
+    :return: None
+    """
     # sleep before sending for delay
     time.sleep(KAFKA_DELAY)
     producer = KafkaProducer(bootstrap_servers=KAFKA_ADDRESS)
