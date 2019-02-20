@@ -50,7 +50,7 @@ def chunk_generator(iterable: iter, chunksize: int) -> list:
 @click.option("--process_quantity", type=int, default=multiprocessing.cpu_count())
 @click.option("--host", "-h", type=str, default="172.18.0.2")
 @click.option("--port", "-p", type=int, default=6667)
-@click.option("--header-pass", "-head", type=bool, default=True)
+@click.option("--header-pass", "-head", is_flag=True, default=False)
 @click.option("--chunksize", "-s", type=int, default=500)
 @click.option(
     "--delay",
