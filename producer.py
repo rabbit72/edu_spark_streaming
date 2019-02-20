@@ -73,11 +73,13 @@ def main(csv_file, topic, process_quantity, host, port, header_pass, delay, chun
     # pool processes for parallel sending
     with multiprocessing.Pool(process_quantity) as p:
         chunk_number = 1
+        row_quantity = 0
         for chunk in chunk_generator(csv_file, chunksize):
             print(f"Sending {chunk_number} chank of {chunksize} rows")
             p.map(send_to_kafka, chunk)
             chunk_number += 1
-    print("All rows were sent successfully")
+            row_quantity += len(chunk)
+    print(f"{row_quantity} rows were sent successfully")
 
 
 if __name__ == "__main__":
