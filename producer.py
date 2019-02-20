@@ -19,29 +19,29 @@ def send_to_kafka(line: str) -> None:
     producer.flush()
 
 
-def batch_generator(iterable: iter, batchsize: int) -> list:
+def chunk_generator(iterable: iter, chunksize: int) -> list:
     """
-    Batch generator takes batchsize-elements and yield it as list
-    :param iterable: Source for batch generating
-    :param batchsize: quantity of elements in each batch
-    :return: batch with batchsize-elements from iter
+    Chunk generator takes chunksize-elements and yield it as list
+    :param iterable: Source for chunk generating
+    :param chunksize: quantity of elements in each chunk
+    :return: chunk with chunksize-elements from iter
     :rtype list
     """
-    if not isinstance(batchsize, int) or batchsize <= 0:
+    if not isinstance(chunksize, int) or chunksize <= 0:
         raise ValueError(
-            f"Batchsize must be integer above zero. Current value: {batchsize}"
+            f"Chunksize must be integer above zero. Current value: {chunksize}"
         )
     while True:
-        batch: list = []
-        for _ in range(batchsize):
+        chunk: list = []
+        for _ in range(chunksize):
             try:
-                # read next line and add to batch until StopIteration
-                batch.append(next(iterable))
+                # read next line and add to chunk until StopIteration
+                chunk.append(next(iterable))
             except StopIteration:
-                if batch:
-                    yield batch
+                if chunk:
+                    yield chunk
                 raise StopIteration
-        yield batch
+        yield chunk
 
 
 @click.command()
@@ -73,9 +73,9 @@ def main(csv_file, topic, process_quantity, host, port, header_pass, delay, chun
     # pool processes for parallel sending
     with multiprocessing.Pool(process_quantity) as p:
         chunk_number = 1
-        for batch in batch_generator(csv_file, chunksize):
+        for chunk in chunk_generator(csv_file, chunksize):
             print(f"Sending {chunk_number} chank of {chunksize} rows")
-            p.map(send_to_kafka, batch)
+            p.map(send_to_kafka, chunk)
             chunk_number += 1
     print("All rows were sent successfully")
 

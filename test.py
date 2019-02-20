@@ -1,5 +1,5 @@
 import pytest
-from producer import batch_generator
+from producer import chunk_generator
 
 
 @pytest.mark.parametrize("chunksize, input_data, expected_output", [
@@ -10,13 +10,13 @@ from producer import batch_generator
     (1, [], []),
 
 ])
-def test_batch_generator(chunksize, input_data, expected_output):
+def test_chunk_generator(chunksize, input_data, expected_output):
     iterable: iter = iter(input_data)
-    assert list(batch_generator(iterable, chunksize)) == expected_output
+    assert list(chunk_generator(iterable, chunksize)) == expected_output
 
 
 @pytest.mark.parametrize("chunksize", [0, -1, 5.35, 'error'])
-def test_batch_generator_value_error(chunksize):
+def test_chunk_generator_value_error(chunksize):
     iterable: iter = iter([1, 2, 3])
     with pytest.raises(ValueError):
-        list(batch_generator(iterable, chunksize))
+        list(chunk_generator(iterable, chunksize))
