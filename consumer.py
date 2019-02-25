@@ -15,7 +15,7 @@ def main():
     dir_for_checkpoint = "checkpoint"
     es_nodes = "localhost"
     es_index = "test"
-    es_document_type = "message"
+    es_document_type = "booking"
 
     try:
         # read first argv as work dir for checkpoint or result
@@ -42,7 +42,7 @@ def main():
         .option("kafka.bootstrap.servers", kafka_address)
         .option("subscribe", kafka_topic)
         .load()
-        .selectExpr("CAST(value AS STRING)")
+        .selectExpr("CAST(timestamp as TIMESTAMP)", "CAST(value AS STRING)")
     )
 
     query = lines.writeStream.outputMode("append").option(
